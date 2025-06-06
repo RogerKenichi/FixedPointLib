@@ -3,6 +3,8 @@ using FixedPointLib;
 
 public class FixedTests
 {
+    private Fixed FromRaw(int raw) => new Fixed(raw);
+
     [Fact]
     public void FromInt_ShouldCreateCorrectFixed()
     {
@@ -27,6 +29,18 @@ public class FixedTests
         Assert.Equal(15.0f, result.ToFloat(), 4);
     }
 
+    [Theory]
+    [InlineData(int.MaxValue, 1, int.MaxValue)]
+    [InlineData(int.MinValue, -1, int.MinValue)]
+    public void Add_ShouldSaturateWhenOverflowOccurs(int rawA, int rawB, Fixed expectedRaw)
+    {
+        Fixed a = FromRaw(rawA);
+        Fixed b = FromRaw(rawB);
+        Fixed result = a + b;
+
+        Assert.Equal(expectedRaw, result.Raw);
+    }
+
     [Fact]
     public void Subtraction_ShouldSubtractCorrectly()
     {
@@ -37,6 +51,18 @@ public class FixedTests
         Assert.Equal(5.0f, result.ToFloat(), 4);
     }
 
+    [Theory]
+    [InlineData(int.MaxValue, -1, int.MaxValue)]
+    [InlineData(int.MinValue, 1, int.MinValue)]
+    public void Subtraction_ShouldSaturateWhenOverflowOccurs(int rawA, int rawB, Fixed expectedRaw)
+    {
+        Fixed a = FromRaw(rawA);
+        Fixed b = FromRaw(rawB);
+        Fixed result = a - b;
+
+        Assert.Equal(expectedRaw, result.Raw);
+    }
+
     [Fact]
     public void Multiplication_ShouldMultiplyCorrectly()
     {
@@ -45,6 +71,18 @@ public class FixedTests
         Fixed result = a * b;
 
         Assert.InRange(result.ToFloat(), 2.99f, 3.01f);
+    }
+
+    [Theory]
+    [InlineData(int.MaxValue, 2)]
+    [InlineData(int.MinValue, 2)]
+    public void Mul_ShouldSaturateWhenOverflowOccurs(int aRaw, int bRaw)
+    {
+        Fixed a = new Fixed(aRaw);
+        Fixed b = new Fixed(bRaw);
+        Fixed result = a * b;
+
+        Assert.True(result.Raw <= Fixed.MAX_RAW && result.Raw >= Fixed.MIN_RAW);
     }
 
     [Fact]
@@ -73,6 +111,24 @@ public class FixedTests
         Fixed result = Fixed.Pow(a, -3);
 
         Assert.InRange(result.ToFloat(), 0.124f, 0.126f);
+    }
+    [Theory]
+    [InlineData(int.MaxValue, 1, int.MaxValue)]
+    [InlineData(int.MinValue, 1, int.MinValue)]
+    public void Div_ShouldSaturateWhenOverflowOccurs(int rawA, int rawB, int expectedRaw)
+    {
+        Fixed a = FromRaw(rawA);
+        Fixed b = FromRaw(rawB);
+        Fixed result = a / b;
+
+        Assert.Equal(expectedRaw, result.Raw);
+    }
+
+    [Fact]
+    public void Division_ShouldThrowExceptionForZeroValue()
+    {
+        Fixed a = Fixed.FromFloat(3.0f);
+        Assert.Throws<DivideByZeroException>(() => a / Fixed.ZERO);
     }
 
     [Fact]

@@ -9,7 +9,10 @@ namespace FixedPointLib
         private readonly int raw;
         public readonly static Fixed ZERO = FromInt(0);
         public readonly static Fixed ONE = FromInt(1);
-        public readonly static Fixed MINUS_ONE = FromInt(-1);
+        public readonly static Fixed MINUS_ONE = FromInt(-1);        public readonly static int MAX_RAW = int.MaxValue;
+        public readonly static int MIN_RAW = int.MinValue;
+        public readonly static Fixed MAX = new Fixed(MAX_RAW).ToFloat();
+        public readonly static Fixed MIN = new Fixed(MIN_RAW).ToFloat();
         internal int Raw => raw;
 
         public Fixed(int rawValue)
@@ -25,10 +28,15 @@ namespace FixedPointLib
         public static implicit operator Fixed(float value) => FromFloat(value);
         public static implicit operator float(Fixed value) => value.ToFloat();
 
-        public static Fixed operator +(Fixed a, Fixed b) => new Fixed(a.raw + b.raw);
-        public static Fixed operator - (Fixed a, Fixed b) => new Fixed(a.raw - b.raw);
-        public static Fixed operator * (Fixed a, Fixed b) => new Fixed((int)(((long)a.raw * b.raw) >> FRACTIONAL_BITS));
-        public static Fixed operator /(Fixed a, Fixed b) => new Fixed((int)(((long)a.raw << FRACTIONAL_BITS) / b.raw));
+        public static Fixed operator +(Fixed a, Fixed b) => Saturate(a.raw + b.raw);
+        public static Fixed operator -(Fixed a, Fixed b) => Saturate(a.raw - b.raw);
+        public static Fixed operator *(Fixed a, Fixed b) => Saturate(((long)a.raw * b.raw) >> FRACTIONAL_BITS);
+        public static Fixed operator /(Fixed a, Fixed b)
+        {
+            if (b.Raw == 0)
+                throw new DivideByZeroException();
+            return Saturate(((long)a.raw << FRACTIONAL_BITS) / b.raw);
+        }
 
         public static Fixed Pow(Fixed a, int b)
         {
@@ -51,5 +59,14 @@ namespace FixedPointLib
         }
 
         public override string ToString() => ToFloat().ToString("F4", CultureInfo.InvariantCulture);
+
+        private static Fixed Saturate(long value)
+        {
+            if (value > MAX_RAW)
+                return new Fixed(MAX_RAW);
+            if (value < MIN_RAW)
+                return new Fixed(MIN_RAW);
+            return new Fixed((int)value);
+        }
     }
 }
