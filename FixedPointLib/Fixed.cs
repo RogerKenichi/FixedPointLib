@@ -7,6 +7,9 @@ namespace FixedPointLib
         private const int FRACTIONAL_BITS = 16;
         private const int ONE_RAW = 1 << FRACTIONAL_BITS;
         private readonly int raw;
+        public readonly static Fixed ZERO = FromInt(0);
+        public readonly static Fixed ONE = FromInt(1);
+        public readonly static Fixed MINUS_ONE = FromInt(-1);
         internal int Raw => raw;
 
         public Fixed(int rawValue)
