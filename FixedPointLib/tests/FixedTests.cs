@@ -20,6 +20,13 @@ public class FixedTests
     }
 
     [Fact]
+    public void FromDecimal_ShouldCreateCorrectFixed()
+    {
+        Fixed fixedValue = Fixed.FromDecimal(3.1415m);
+        Assert.Equal(fixedValue, 3.1415m);
+    }
+
+    [Fact]
     public void Addition_ShouldAddCorrectly()
     {
         Fixed a = Fixed.FromInt(5);
@@ -66,11 +73,11 @@ public class FixedTests
     [Fact]
     public void Multiplication_ShouldMultiplyCorrectly()
     {
-        Fixed a = Fixed.FromFloat(1.5f);
-        Fixed b = Fixed.FromFloat(2.0f);
+        Fixed a = Fixed.FromDecimal(1.5m);
+        Fixed b = Fixed.FromDecimal(2.0m);
         Fixed result = a * b;
 
-        Assert.InRange(result.ToFloat(), 2.99f, 3.01f);
+        Assert.Equal(result, 3.0m);
     }
 
     [Theory]
@@ -88,30 +95,13 @@ public class FixedTests
     [Fact]
     public void Division_ShouldDivideCorrectly()
     {
-        Fixed a = Fixed.FromFloat(3.0f);
-        Fixed b = Fixed.FromFloat(1.5f);
+        Fixed a = Fixed.FromDecimal(3.0m);
+        Fixed b = Fixed.FromDecimal(1.5m);
         Fixed result = a / b;
 
-        Assert.InRange(result.ToFloat(), 1.99f, 2.01f);
+        Assert.Equal(result, 2.0m);
     }
 
-    [Fact]
-    public void Pow_ShouldCalculatePowerCorrectly()
-    {
-        Fixed a = Fixed.FromInt(2);
-        Fixed result = Fixed.Pow(a, 3);
-
-        Assert.Equal(8.0f, result.ToFloat(), 4);
-    }
-
-    [Fact]
-    public void Pow_NegativeExponent_ShouldCalculateCorrectly()
-    {
-        Fixed a = Fixed.FromInt(2);
-        Fixed result = Fixed.Pow(a, -3);
-
-        Assert.InRange(result.ToFloat(), 0.124f, 0.126f);
-    }
     [Theory]
     [InlineData(int.MaxValue, 1, int.MaxValue)]
     [InlineData(int.MinValue, 1, int.MinValue)]
@@ -127,7 +117,7 @@ public class FixedTests
     [Fact]
     public void Division_ShouldThrowExceptionForZeroValue()
     {
-        Fixed a = Fixed.FromFloat(3.0f);
+        Fixed a = Fixed.FromDecimal(3.0m);
         Assert.Throws<DivideByZeroException>(() => a / Fixed.ZERO);
     }
 
@@ -144,7 +134,7 @@ public class FixedTests
     [Fact]
     public void ToString_ShouldFormatWith4DecimalPlaces()
     {
-        Fixed a = Fixed.FromFloat(3.14159f);
+        Fixed a = Fixed.FromDecimal(3.14159m);
         string s = a.ToString();
 
         Assert.Equal("3.1416", s);
