@@ -5,17 +5,18 @@ namespace FixedPointLib
     public readonly struct Fixed
     {
         private const int FRACTIONAL_BITS = 16;
-        private const int ONE_FIXED = 1 << FRACTIONAL_BITS;
+        private const int ONE_RAW = 1 << FRACTIONAL_BITS;
         private readonly int raw;
+        internal int Raw => raw;
 
         public Fixed(int rawValue)
         {
             raw = rawValue;
         }
 
-        public static Fixed FromFloat(float value) => new Fixed((int)(value * ONE_FIXED));
+        public static Fixed FromFloat(float value) => new Fixed((int)(value * ONE_RAW));
         public static Fixed FromInt(int value) => new Fixed(value << FRACTIONAL_BITS);
-        public float ToFloat() => (float)raw / ONE_FIXED;
+        public float ToFloat() => (float)raw / ONE_RAW;
 
         public static implicit operator Fixed(int value) => FromInt(value);
         public static implicit operator Fixed(float value) => FromFloat(value);
