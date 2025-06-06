@@ -2,7 +2,7 @@
 
 A lightweight, dependency-free, and deterministic simple fixed-point number implementation in C#, which is ideal for physics simulations, multiplayer lockstep games, and other scenarios where floating-point inconsistencies across platforms must be avoided.
 
-![Static Badge](https://img.shields.io/badge/build-passing-brightgreen)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/RogerKenichi/FixedPointLib/workflow.yaml)
 ![.NET](https://img.shields.io/badge/.NET-8.0-blue)
 ![GitHub License](https://img.shields.io/github/license/RogerKenichi/FixedPointLib)
 ![Last Commit](https://img.shields.io/github/last-commit/RogerKenichi/FixedPointLib)
