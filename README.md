@@ -2,6 +2,11 @@
 
 A lightweight, dependency-free, and deterministic simple fixed-point number implementation in C#, which is ideal for physics simulations, multiplayer lockstep games, and other scenarios where floating-point inconsistencies across platforms must be avoided.
 
+![Static Badge](https://img.shields.io/badge/build-passing-brightgreen)
+![.NET](https://img.shields.io/badge/.NET-8.0-blue)
+![GitHub License](https://img.shields.io/github/license/RogerKenichi/FixedPointLib)
+![Last Commit](https://img.shields.io/github/last-commit/RogerKenichi/FixedPointLib)
+
 ---
 
 ## ⚙️ How it works?
@@ -159,3 +164,23 @@ There is also two `int` types representing the maximum and minimum raw values:
 Fixed.MAX_RAW   // int.MaxValue
 Fixed.MIN_RAW   // int.MinValue
 ```
+
+---
+
+## 🤝 Contributing
+
+Feel free to contribute for this project. If you have any suggestion and/or want to collaborate to improve `FixedPointLib`, follow the steps below:
+
+- Create a Fork of this repository
+- Create a branch with a clear description
+    ```bash
+    git checkout -b feature/your-feature
+    ```
+- Code your solution
+- Write or update unit tests
+- Follow the original code standards
+- Write your commit with a clear description
+    ```bash
+    git commit -m "feature: description of your feature"
+    ```
+- Open a pull request with a detailed description of what you changed
